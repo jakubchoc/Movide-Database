@@ -23,6 +23,7 @@ public class PersonEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String biography;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private String role;
 
 }
