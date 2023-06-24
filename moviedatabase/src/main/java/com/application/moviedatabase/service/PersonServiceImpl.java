@@ -5,9 +5,14 @@ import com.application.moviedatabase.dto.PersonDTO;
 import com.application.moviedatabase.dto.mapper.PersonMapper;
 import com.application.moviedatabase.entity.PersonEntity;
 import com.application.moviedatabase.entity.repository.PersonRepository;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,7 +21,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
+
     private PersonRepository personRepository;
+
     private PersonMapper personMapper;
 
     @Override
@@ -27,13 +34,38 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonDTO> getPeople(RoleType role, int limit) {
-        Page<PersonEntity> pageOfPeople = personRepository.getAllByRole(role, limit);
-        List<PersonEntity> peopleEntities = pageOfPeople.getContent();
+    public List<PersonDTO> getPeople(RoleType roleType, int limit) {
+        Page<PersonEntity> pageOfPeople = personRepository.getAllByRole(roleType, PageRequest.of(0, limit));
+        List<PersonEntity> personEntities = pageOfPeople.getContent();
 
-        return peopleEntities.stream()
+        return personEntities.stream()
                 .map(personMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PersonDTO getPerson(Long personId) {
+        PersonEntity person = personRepository.getReferenceById(personId);
+        return personMapper.toDTO(person);
+    }
+
+    @Override
+    public PersonDTO editPerson(Long personId, PersonDTO personDTO) {
+        if (!personRepository.existsById(personId)) {
+            throw new EntityNotFoundException("Person with id " + personId + " not found");
+        }
+        PersonEntity entity = personMapper.toEntity(personDTO);
+        entity.setId(personId);
+        PersonEntity saved = personRepository.save(entity);
+        return  personMapper.toDTO(saved);
+    }
+
+    @Override
+    public PersonDTO removePerson(Long personId) {
+        PersonEntity person = personRepository.findById(personId).orElseThrow(EntityNotFoundException::new);
+        PersonDTO model = personMapper.toDTO(person);
+        personRepository.delete(person);
+        return model;
     }
 
 }

@@ -5,11 +5,8 @@ import com.application.moviedatabase.dto.PersonDTO;
 import com.application.moviedatabase.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,18 +16,29 @@ public class PersonController {
     private final PersonService personService;
 
     @PostMapping({"/people/", "/people"})
-    public void addPerson() {
-
+    public PersonDTO addPerson(@RequestBody PersonDTO personDTO) {
+        return personService.addPerson(personDTO);
     }
 
     @GetMapping({"/actors/", "/actors"})
-    public List<PersonDTO> getActors(@RequestParam int limit) {
-        return personService.getPeople(RoleType.ACTOR, limit);
+    public List<PersonDTO> getActors(@RequestParam(required = false, defaultValue = Integer.MAX_VALUE + "") int limit) {
+        return personService.getPeople(RoleType.actor, limit);
     }
 
     @GetMapping({"/directors/", "/directors"})
-    public List<PersonDTO> getDirectors(@RequestParam int limit) {
-        return personService.getPeople(RoleType.DIRECTOR, limit);
+    public List<PersonDTO> getDirectors(@RequestParam(required = false, defaultValue = Integer.MAX_VALUE + "") int limit) {
+        return personService.getPeople(RoleType.director, limit);
     }
+
+    @GetMapping("/people/{personId}")
+    public PersonDTO getPerson(@PathVariable Long personId) {
+        return personService.getPerson(personId);
+    }
+
+    @PutMapping({"/people/{personId}", "/people/{personId}/"})
+    public PersonDTO editPerson(@PathVariable Long personId, @RequestBody PersonDTO personDTO) {
+        return personService.editPerson(personId, personDTO);
+    }
+
 
 }
