@@ -15,17 +15,17 @@ public class PersonController {
 
     private final PersonService personService;
 
-    @PostMapping({"/people/", "/people"})
+    @PostMapping("/people")
     public PersonDTO addPerson(@RequestBody PersonDTO personDTO) {
         return personService.addPerson(personDTO);
     }
 
-    @GetMapping({"/actors/", "/actors"})
+    @GetMapping("/actors")
     public List<PersonDTO> getActors(@RequestParam(required = false, defaultValue = Integer.MAX_VALUE + "") int limit) {
         return personService.getPeople(RoleType.actor, limit);
     }
 
-    @GetMapping({"/directors/", "/directors"})
+    @GetMapping("/directors")
     public List<PersonDTO> getDirectors(@RequestParam(required = false, defaultValue = Integer.MAX_VALUE + "") int limit) {
         return personService.getPeople(RoleType.director, limit);
     }
@@ -35,10 +35,8 @@ public class PersonController {
         return personService.getPerson(personId);
     }
 
-    @PutMapping({"/people/{personId}", "/people/{personId}/"})
+    @PutMapping("/people/{personId}")
     public PersonDTO editPerson(@PathVariable Long personId, @RequestBody PersonDTO personDTO) {
         return personService.editPerson(personId, personDTO);
     }
-
-
 }

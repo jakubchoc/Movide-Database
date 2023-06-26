@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 public class MovieDTO {
 
-    @NonNull
     @JsonProperty("_id")
     private long id;
     @NotBlank
