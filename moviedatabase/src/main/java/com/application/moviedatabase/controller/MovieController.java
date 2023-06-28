@@ -18,8 +18,8 @@ public class MovieController {
     }
 
     @PutMapping("/movie/{movieId}")
-    public MovieDTO editMovie(@RequestBody MovieDTO movieDTO) {
-        return movieService.editMovie(movieDTO);
+    public MovieDTO editMovie(@RequestParam Long movieId, @RequestBody MovieDTO movieDTO) {
+        return movieService.editMovie(movieId, movieDTO);
     }
 
     public String[] getGenres() {

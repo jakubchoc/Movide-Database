@@ -44,6 +44,7 @@ public class MovieMapperImpl implements MovieMapper {
 
         MovieDTO movieDTO = new MovieDTO();
 
+        movieDTO.setDirectorID( sourceDirectorId( source ) );
         if ( source.getId() != null ) {
             movieDTO.setId( source.getId() );
         }
@@ -57,6 +58,8 @@ public class MovieMapperImpl implements MovieMapper {
         movieDTO.setDateAdded( source.getDateAdded() );
         movieDTO.setDirector( personEntityToPersonDTO( source.getDirector() ) );
         movieDTO.setActors( personEntityListToPersonDTOList( source.getActors() ) );
+
+        movieDTO.setActorIDs( getActorIds(source) );
 
         return movieDTO;
     }
@@ -89,6 +92,18 @@ public class MovieMapperImpl implements MovieMapper {
         target.setYear( source.getYear() );
 
         return target;
+    }
+
+    private Long sourceDirectorId(MovieEntity movieEntity) {
+        if ( movieEntity == null ) {
+            return null;
+        }
+        PersonEntity director = movieEntity.getDirector();
+        if ( director == null ) {
+            return null;
+        }
+        long id = director.getId();
+        return id;
     }
 
     protected PersonDTO personEntityToPersonDTO(PersonEntity personEntity) {

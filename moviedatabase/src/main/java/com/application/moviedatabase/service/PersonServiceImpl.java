@@ -53,7 +53,7 @@ public class PersonServiceImpl implements PersonService {
         PersonEntity entity = personMapper.toEntity(personDTO);
         entity.setId(personId);
         PersonEntity saved = personRepository.save(entity);
-        return  personMapper.toDTO(saved);
+        return personMapper.toDTO(saved);
     }
 
     @Override
