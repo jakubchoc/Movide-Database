@@ -3,10 +3,11 @@ package com.application.moviedatabase.service;
 import com.application.moviedatabase.dto.MovieDTO;
 import com.application.moviedatabase.dto.mapper.MovieMapper;
 import com.application.moviedatabase.entity.MovieEntity;
-import com.application.moviedatabase.entity.MovieFilter;
+import com.application.moviedatabase.entity.filter.MovieFilter;
 import com.application.moviedatabase.entity.PersonEntity;
 import com.application.moviedatabase.entity.repository.MovieRepository;
 import com.application.moviedatabase.entity.repository.PersonRepository;
+import com.application.moviedatabase.entity.repository.specification.MovieSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -64,7 +65,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieDTO> getAllMovies(MovieFilter movieFilter) {
-        return movieRepository.getFilteredMovies(movieFilter, PageRequest.of(0, movieFilter.getLimit()))
+        MovieSpecification movieSpecification = new MovieSpecification(movieFilter);
+
+        return movieRepository.getFilteredMovies(movieSpecification, PageRequest.of(0, movieFilter.getLimit()))
                 .stream()
                 .map(movieMapper::toDTO)
                 .collect(Collectors.toList());

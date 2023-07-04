@@ -1,7 +1,7 @@
 package com.application.moviedatabase.controller;
 
 import com.application.moviedatabase.dto.MovieDTO;
-import com.application.moviedatabase.entity.MovieFilter;
+import com.application.moviedatabase.entity.filter.MovieFilter;
 import com.application.moviedatabase.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

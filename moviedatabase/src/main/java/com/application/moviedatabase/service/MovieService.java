@@ -1,7 +1,7 @@
 package com.application.moviedatabase.service;
 
 import com.application.moviedatabase.dto.MovieDTO;
-import com.application.moviedatabase.entity.MovieFilter;
+import com.application.moviedatabase.entity.filter.MovieFilter;
 
 import java.util.List;
 
