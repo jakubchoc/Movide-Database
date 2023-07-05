@@ -37,6 +37,34 @@ public class MovieMapperImpl implements MovieMapper {
     }
 
     @Override
+    public void updateEntity(MovieDTO source, MovieEntity target) {
+        if ( source == null ) {
+            return;
+        }
+
+        target.setId( source.getId() );
+        target.setName( source.getName() );
+        target.setAvailable( source.isAvailable() );
+        if ( target.getGenres() != null ) {
+            List<String> list = source.getGenres();
+            if ( list != null ) {
+                target.getGenres().clear();
+                target.getGenres().addAll( list );
+            }
+            else {
+                target.setGenres( null );
+            }
+        }
+        else {
+            List<String> list = source.getGenres();
+            if ( list != null ) {
+                target.setGenres( new ArrayList<String>( list ) );
+            }
+        }
+        target.setYear( source.getYear() );
+    }
+
+    @Override
     public MovieDTO toDTO(MovieEntity source) {
         if ( source == null ) {
             return null;
@@ -62,36 +90,6 @@ public class MovieMapperImpl implements MovieMapper {
         movieDTO.setActorIDs( getActorIds(source) );
 
         return movieDTO;
-    }
-
-    @Override
-    public MovieEntity updateEntity(MovieDTO source, MovieEntity target) {
-        if ( source == null ) {
-            return target;
-        }
-
-        target.setId( source.getId() );
-        target.setName( source.getName() );
-        target.setAvailable( source.isAvailable() );
-        if ( target.getGenres() != null ) {
-            List<String> list = source.getGenres();
-            if ( list != null ) {
-                target.getGenres().clear();
-                target.getGenres().addAll( list );
-            }
-            else {
-                target.setGenres( null );
-            }
-        }
-        else {
-            List<String> list = source.getGenres();
-            if ( list != null ) {
-                target.setGenres( new ArrayList<String>( list ) );
-            }
-        }
-        target.setYear( source.getYear() );
-
-        return target;
     }
 
     private Long sourceDirectorId(MovieEntity movieEntity) {
